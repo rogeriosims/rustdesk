@@ -1,6 +1,6 @@
-# Instruções para Personalização do Aplicativo
+# Instruções para Personalização e Desenvolvimento
 
-Este documento detalha os passos necessários para personalizar o aplicativo com sua própria marca, incluindo logotipo, cores e configurações de servidor.
+Este documento detalha os passos necessários para personalizar e compilar o aplicativo com sua própria marca, incluindo logotipo, cores, configurações de servidor e um guia de desenvolvimento para Windows.
 
 ## 1. Personalização de Logotipo e Ícones
 
@@ -167,3 +167,132 @@ pub const RS_PUB_KEY: &str = "sua-chave-publica-em-base64";
 
 -   A chave pública (`RS_PUB_KEY`) que você insere no código-fonte do cliente **deve corresponder à chave pública usada pelo seu servidor `hbbs`**. Se as chaves não corresponderem, o cliente não conseguirá se conectar ao servidor.
 -   Após fazer essas alterações, você deve recompile completamente o aplicativo para que as novas configurações padrão sejam incluídas no executável final.
+
+## 4. Guia de Desenvolvimento para Windows 10
+
+Esta seção fornece um guia passo a passo para configurar um ambiente de desenvolvimento no Windows 10, permitindo que você modifique, compile e teste o aplicativo.
+
+### 4.1. Pré-requisitos e Instalação de Ferramentas
+
+Você precisará das seguintes ferramentas:
+
+1.  **Visual Studio Code**: Um editor de código-fonte leve e poderoso.
+    *   **Instalação**: Baixe e instale a partir do [site oficial do VS Code](https://code.visualstudio.com/).
+    *   **Extensões Recomendadas**:
+        *   `rust-analyzer`: Para suporte à linguagem Rust.
+        *   `Dart`: Para suporte à linguagem Dart.
+        *   `Flutter`: Para desenvolvimento Flutter.
+
+2.  **Rust**: A linguagem de programação usada para o backend do aplicativo.
+    *   **Instalação**: Instale o Rust através do `rustup`. Baixe o `rustup-init.exe` do [site oficial do Rust](https://www.rust-lang.org/tools/install) e siga as instruções. A instalação padrão geralmente é suficiente.
+
+3.  **Flutter SDK**: O kit de desenvolvimento para a interface do usuário do aplicativo.
+    *   **Instalação**: Siga o [guia de instalação oficial do Flutter para Windows](https://flutter.dev/docs/get-started/install/windows). Isso inclui baixar o SDK, extraí-lo e adicionar o diretório `flutter/bin` ao seu PATH do sistema.
+    *   **Verificação**: Após a instalação, execute `flutter doctor` no seu terminal para garantir que todas as dependências estejam corretas.
+
+4.  **vcpkg**: Um gerenciador de pacotes da Microsoft para bibliotecas C++.
+    *   **Instalação**: Siga o [guia oficial do vcpkg](https://github.com/microsoft/vcpkg). O processo geralmente envolve clonar o repositório e executar um script de bootstrap.
+        ```bash
+        git clone https://github.com/microsoft/vcpkg
+        cd vcpkg
+        ./bootstrap-vcpkg.bat
+        ```
+    *   **Variável de Ambiente**: Defina a variável de ambiente `VCPKG_ROOT` para o diretório onde você clonou o vcpkg.
+    *   **Instalação de Dependências**: Use o vcpkg para instalar as bibliotecas necessárias, conforme listado no `README.md` do projeto.
+        ```bash
+        vcpkg install libvpx:x64-windows-static libyuv:x64-windows-static opus:x64-windows-static aom:x64-windows-static
+        ```
+
+### 4.2. Processo de Compilação e Teste
+
+1.  **Obtenha o Código-Fonte**:
+    *   Clone o repositório do aplicativo para o seu computador.
+        ```bash
+        git clone https://github.com/rustdesk/rustdesk.git
+        cd rustdesk
+        ```
+
+2.  **Abra no VS Code**:
+    *   Abra a pasta do projeto no Visual Studio Code.
+        ```bash
+        code .
+        ```
+
+3.  **Realize as Modificações**:
+    *   Use o VS Code para editar os arquivos conforme descrito nas seções de personalização deste documento (logotipos, cores, configurações do servidor).
+
+4.  **Compile o Aplicativo**:
+    *   Abra um terminal dentro do VS Code (ou use um terminal externo).
+    *   Execute o comando de compilação do Cargo. Este comando compilará tanto o backend Rust quanto a interface Flutter.
+        ```bash
+        cargo run
+        ```
+    *   A primeira compilação pode levar um tempo considerável, pois o Cargo baixará e compilará todas as dependências do Rust. As compilações subsequentes serão muito mais rápidas.
+
+5.  **Teste o Aplicativo**:
+    *   Após a compilação bem-sucedida, o aplicativo será iniciado automaticamente.
+    *   Verifique se todas as suas personalizações (logotipo, cores, etc.) aparecem corretamente.
+    *   Teste a funcionalidade principal, como estabelecer uma conexão remota, para garantir que as alterações no servidor padrão estão funcionando.
+
+6.  **Gere o Executável para Distribuição**:
+    *   Para criar uma versão otimizada de lançamento (release), use o seguinte comando:
+        ```bash
+        cargo build --release
+        ```
+    *   O executável final estará localizado no diretório `target/release/`. Este é o arquivo que você distribuirá.
+
+## 5. Como Gerar um Executável Confiável (Assinatura de Código)
+
+Para evitar que seu aplicativo seja sinalizado como um vírus ou software não confiável pelo Windows e por programas antivírus, é crucial assinar digitalmente o executável. A assinatura de código (Code Signing) valida a identidade do desenvolvedor e garante que o código não foi adulterado.
+
+### 5.1. Entendendo a Assinatura de Código
+
+-   **O que é?**: É um processo que adiciona uma assinatura digital a um executável.
+-   **Por que é importante?**:
+    *   **Reputação**: Aumenta a confiança do usuário e do sistema operacional. O Windows SmartScreen, por exemplo, é menos propenso a bloquear aplicativos assinados.
+    *   **Integridade**: Garante que o software não foi modificado desde que foi assinado.
+    *   **Identidade**: Prova que o software veio de você, o desenvolvedor.
+
+### 5.2. Opções de Certificado de Assinatura de Código
+
+Certificados totalmente gratuitos de Autoridades Certificadoras (CAs) comerciais não são mais comuns. No entanto, existem alternativas de baixo custo e opções para cenários específicos:
+
+1.  **Certificados Comerciais (Opção Padrão)**:
+    *   **O que são**: Certificados emitidos por CAs confiáveis como Sectigo, DigiCert, etc.
+    *   **Custo**: Geralmente, custam a partir de $200 por ano. Revendedores como o `Code Signing Store` podem oferecer preços mais competitivos.
+    *   **Vantagens**: Oferecem a maior compatibilidade e confiança, removendo a maioria dos avisos de segurança.
+
+2.  **OSSign (Para Projetos de Código Aberto)**:
+    *   **O que é**: Um serviço que oferece assinatura de código gratuita para projetos de código aberto qualificados.
+    *   **Custo**: Gratuito, mas requer um processo de aplicação e qualificação.
+    *   **Vantagens**: É a opção ideal se o seu projeto for de código aberto e atender aos critérios deles.
+
+3.  **Certificados Autoassinados (Para Testes)**:
+    *   **O que são**: Certificados que você mesmo gera, sem a validação de uma CA.
+    *   **Custo**: Gratuito.
+    *   **Desvantagens**: Não são confiáveis para sistemas de usuários finais. O Windows e os antivírus exibirão avisos de segurança severos, pois a identidade não pode ser verificada. São úteis apenas para desenvolvimento e testes internos.
+
+### 5.3. Processo de Assinatura no Windows
+
+Depois de obter um certificado (geralmente um arquivo `.pfx`), você usará a ferramenta `signtool.exe`, que faz parte do Windows SDK.
+
+1.  **Instale o Windows SDK**:
+    *   Você pode instalá-lo através do [Visual Studio Installer](https://visualstudio.microsoft.com/downloads/), selecionando a carga de trabalho "Desenvolvimento para desktop com C++" e garantindo que o componente "Windows 10 SDK" ou "Windows 11 SDK" esteja marcado.
+
+2.  **Localize o `signtool.exe`**:
+    *   A ferramenta geralmente está localizada em um caminho como: `C:\Program Files (x86)\Windows Kits\10\bin\<versão>\x64\signtool.exe`.
+
+3.  **Execute o Comando de Assinatura**:
+    *   Abra o "Prompt de Comando do Desenvolvedor para VS" (Developer Command Prompt for VS) para ter o `signtool` no seu PATH.
+    *   Use o seguinte comando para assinar seu executável:
+        ```bash
+        signtool sign /f "Caminho\Para\Seu\Certificado.pfx" /p "SuaSenhaDoCertificado" /tr http://timestamp.digicert.com /td sha256 /fd sha256 "Caminho\Para\Seu\target\release\rustdesk.exe"
+        ```
+    *   **Explicação dos Parâmetros**:
+        *   `/f`: Especifica o arquivo do seu certificado.
+        *   `/p`: A senha para o seu arquivo de certificado.
+        *   `/tr`: O URL de um servidor de timestamp (carimbo de data/hora). Isso garante que a assinatura permaneça válida mesmo após o vencimento do certificado.
+        *   `/td` e `/fd`: Especificam os algoritmos de hash (SHA256 é o padrão moderno).
+        *   O último argumento é o caminho para o executável que você compilou.
+
+Após a execução bem-sucedida, seu executável estará assinado digitalmente, aumentando significativamente sua confiabilidade.
