@@ -201,9 +201,13 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 msix_config:
-  display_name: RocketDesk
-  publisher_display_name: RocketDesk
-  identity_name: RocketDesk
-  msix_version: 1.0.0.0
-  logo_path: C:\images\logo.png
-  store: false
+  display_name: RocketDesk Suporte Remoto
+  publisher_display_name: Nota Fácil
+  identity_name: NotaFcil.RocketDeskSuporteRemoto
+  publisher: CN=23848FD3-96ED-48B3-B172-3D2EED3E1E8F
+  msix_version: 1.4.4.0
+  logo_path: assets/logo-rocketdesk.png
+  store: true
+  capabilities:
+    - internetClient
+    - runFullTrust
