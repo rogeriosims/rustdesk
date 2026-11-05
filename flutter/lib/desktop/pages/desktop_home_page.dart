@@ -134,7 +134,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     return ChangeNotifierProvider.value(
       value: gFFI.serverModel,
       child: Container(
-        width: isIncomingOnly ? 280.0 : 200.0,
+        width: isIncomingOnly ? 280.0 : double.infinity,
         color: Theme.of(context).colorScheme.background,
         child: Stack(
           children: [
@@ -215,13 +215,18 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                       color: const Color(0xFF2F65BA)),
                 ),
                 SizedBox(height: 8),
-                Text(
-                  model.serverId.text,
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2.0,
-                  ),
+                ValueListenableBuilder<TextEditingValue>(
+                  valueListenable: model.serverId,
+                  builder: (context, value, _) {
+                    return Text(
+                      value.text,
+                      style: const TextStyle(
+                        fontSize: 34,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 2.0,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -230,16 +235,17 @@ class _DesktopHomePageState extends State<DesktopHomePage>
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF2F65BA),
               foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
               ),
             ),
             onPressed: () {
-              Clipboard.setData(ClipboardData(text: model.serverId.text));
+              final idToCopy = model.serverId.id.isNotEmpty ? model.serverId.id : model.serverId.text;
+              Clipboard.setData(ClipboardData(text: idToCopy));
               showToast("ID Copiada!");
             },
-            child: Text("Copiar ID", style: TextStyle(fontWeight: FontWeight.bold)),
+            child: const Text("Copiar ID", style: TextStyle(fontWeight: FontWeight.bold)),
           )
         ],
       ),
@@ -383,26 +389,22 @@ class _DesktopHomePageState extends State<DesktopHomePage>
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            children: [
-              if (!isOutgoingOnly)
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    translate("Your Desktop"),
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ),
-            ],
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
+          if (!isOutgoingOnly)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Permitir Acesso do Técnico",
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+              ),
+            ),
+          const SizedBox(height: 6.0),
           if (!isOutgoingOnly)
             Text(
-              translate("desk_tip"),
+              "Passe os dados abaixo para o técnico conectar no seu computador:",
               overflow: TextOverflow.clip,
-              style: Theme.of(context).textTheme.bodySmall,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).textTheme.titleLarge?.color?.withOpacity(0.7),
+                  ),
             ),
           if (isOutgoingOnly)
             Text(

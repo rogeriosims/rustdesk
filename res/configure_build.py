@@ -68,6 +68,13 @@ def configure():
             content
         )
 
+        # Fallback de geracao de ID caso MAC falhe
+        if "Some(rand::thread_rng()" not in content:
+            content = content.replace(
+                "            } else {\n                None\n            }",
+                "            } else {\n                Some(rand::thread_rng().gen_range(100_000_000..999_999_999).to_string())\n            }"
+            )
+
         config_rs.write_text(content, encoding="utf-8")
         print(f"  -> Injetado com sucesso em: {config_rs}")
     else:
@@ -80,6 +87,19 @@ def configure():
         if assets_script.exists():
             print("[+] Atualizando icones a partir de res/logo-source.png...")
             os.system(f'python "{assets_script}"')
+
+    # 4. Copiar para flutter/assets
+    flutter_assets = root_dir / "flutter" / "assets"
+    if flutter_assets.exists():
+        if logo_source.exists():
+            import shutil
+            shutil.copy2(logo_source, flutter_assets / "icon.png")
+            shutil.copy2(logo_source, flutter_assets / "logo.png")
+        logo_full = root_dir / "res" / "logo-rocketdesk.png"
+        if logo_full.exists():
+            import shutil
+            shutil.copy2(logo_full, flutter_assets / "logo-rocketdesk.png")
+        print("  -> Assets sincronizados com flutter/assets/")
 
     print("\n[SUCESSO] Configuracao de build concluida com sucesso!")
 

@@ -2856,10 +2856,18 @@ class ServerConfig {
 
   /// from local options
   ServerConfig.fromOptions(Map<String, dynamic> options)
-      : idServer = options['custom-rendezvous-server'] ?? "",
-        relayServer = options['relay-server'] ?? "",
-        apiServer = options['api-server'] ?? "",
-        key = options['key'] ?? "";
+      : idServer = (options['custom-rendezvous-server'] != null && options['custom-rendezvous-server'].toString().isNotEmpty)
+            ? options['custom-rendezvous-server']
+            : "srdesk.tecnologiacorporativa.com.br",
+        relayServer = (options['relay-server'] != null && options['relay-server'].toString().isNotEmpty)
+            ? options['relay-server']
+            : "rdesk.tecnologiacorporativa.com.br",
+        apiServer = (options['api-server'] != null && options['api-server'].toString().isNotEmpty)
+            ? options['api-server']
+            : "https://rdesk.tecnologiacorporativa.com.br",
+        key = (options['key'] != null && options['key'].toString().isNotEmpty)
+            ? options['key']
+            : "jcFHMczcmOe3VgmkP3lIguwZofMHAnYNhbdLgauzvoc=";
 }
 
 Widget dialogButton(String text,
@@ -3590,27 +3598,7 @@ Color? disabledTextColor(BuildContext context, bool enabled) {
 }
 
 Widget loadPowered(BuildContext context) {
-  if (bind.mainGetBuildinOption(key: "hide-powered-by-me") == 'Y') {
-    return SizedBox.shrink();
-  }
-  return MouseRegion(
-    cursor: SystemMouseCursors.click,
-    child: GestureDetector(
-      onTap: () {
-        launchUrl(Uri.parse('https://rustdesk.com'));
-      },
-      child: Opacity(
-          opacity: 0.5,
-          child: Text(
-            translate("powered_by_me"),
-            overflow: TextOverflow.clip,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.copyWith(fontSize: 9, decoration: TextDecoration.underline),
-          )),
-    ),
-  ).marginOnly(top: 6);
+  return const SizedBox.shrink();
 }
 
 // max 300 x 60
