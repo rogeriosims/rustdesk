@@ -241,7 +241,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
               ),
             ),
             onPressed: () {
-              final idToCopy = model.serverId.id.isNotEmpty ? model.serverId.id : model.serverId.text;
+              final idToCopy = model.serverId.text.replaceAll(' ', '');
               Clipboard.setData(ClipboardData(text: idToCopy));
               showToast("ID Copiada!");
             },
