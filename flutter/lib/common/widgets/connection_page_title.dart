@@ -11,16 +11,16 @@ Widget getConnectionPageTitle(BuildContext context, bool isWeb) {
           child: Row(
         children: [
           AutoSizeText(
-            translate('Control Remote Desktop'),
+            "Acessar Outro Computador",
             maxLines: 1,
             style: Theme.of(context)
                 .textTheme
                 .titleLarge
-                ?.merge(TextStyle(height: 1)),
+                ?.merge(TextStyle(height: 1, fontWeight: FontWeight.bold)),
           ).marginOnly(right: 4),
           Tooltip(
             waitDuration: Duration(milliseconds: 300),
-            message: translate(isWeb ? "web_id_input_tip" : "id_input_tip"),
+            message: translate(isWeb ? "web_id_input_tip" : "Digite a ID da máquina remota:"),
             child: Icon(
               Icons.help_outline_outlined,
               size: 16,

@@ -10,6 +10,7 @@ import 'package:flutter_hbb/common.dart';
 import 'package:flutter_hbb/consts.dart';
 import 'package:flutter_hbb/desktop/pages/remote_page.dart';
 import 'package:flutter_hbb/desktop/pages/view_camera_page.dart';
+import 'package:flutter_hbb/desktop/pages/desktop_tab_page.dart';
 import 'package:flutter_hbb/main.dart';
 import 'package:flutter_hbb/models/platform_model.dart';
 import 'package:flutter_hbb/models/state_model.dart';
@@ -640,8 +641,8 @@ class _DesktopTabState extends State<DesktopTab>
                         ),
                         Offstage(
                             offstage: !showTitle,
-                            child: const Text(
-                              "RustDesk",
+                            child: Text(
+                              bind.mainGetAppNameSync(),
                               style: TextStyle(fontSize: 13),
                             ).marginOnly(left: 2))
                       ]).marginOnly(
@@ -766,6 +767,14 @@ class WindowActionPanelState extends State<WindowActionPanel> {
           }
         }),
         if (widget.tail != null) widget.tail!,
+        // Settings Button (Modo Tecnico)
+        if (widget.isMainWindow)
+          ActionIcon(
+            message: 'Configuracoes Avancadas / Modo Tecnico',
+            icon: Icons.settings,
+            onTap: DesktopTabPage.onAddSetting,
+            isClose: false,
+          ),
         if (!kUseCompatibleUiMode)
           Row(
             children: [
