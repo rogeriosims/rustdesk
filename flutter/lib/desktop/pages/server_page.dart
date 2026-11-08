@@ -467,17 +467,10 @@ class _CmHeaderState extends State<_CmHeader>
             height: 70,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: str2color(client.name),
               borderRadius: BorderRadius.circular(15.0),
+              color: Colors.white,
             ),
-            child: Text(
-              client.name[0],
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 55,
-              ),
-            ),
+            child: Image.asset('assets/logo-rocketdesk.png', width: 50, height: 50),
           ).marginOnly(right: 10.0),
           Expanded(
             child: Column(
@@ -486,7 +479,7 @@ class _CmHeaderState extends State<_CmHeader>
               children: [
                 FittedBox(
                     child: Text(
-                  client.name,
+                  "Solicitação de Acesso Remoto",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -495,10 +488,16 @@ class _CmHeaderState extends State<_CmHeader>
                   ),
                   maxLines: 1,
                 )),
+                Text(
+                  "O suporte autorizado está solicitando permissão para controlar este computador.",
+                  style: TextStyle(color: Colors.white, fontSize: 13),
+                  softWrap: true,
+                ),
+                SizedBox(height: 4.0),
                 FittedBox(
                   child: Text(
-                    "(${client.peerId})",
-                    style: TextStyle(color: Colors.white, fontSize: 14),
+                    "Usuário: ${client.name} (${client.peerId})",
+                    style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ),
                 if (client.type_() == ClientType.terminal)
@@ -529,7 +528,7 @@ class _CmHeaderState extends State<_CmHeader>
                       style: TextStyle(color: Colors.white70, fontSize: 12),
                     ),
                   ),
-                SizedBox(height: 10.0),
+                SizedBox(height: 6.0),
                 FittedBox(
                     child: Row(
                   children: [
@@ -538,7 +537,7 @@ class _CmHeaderState extends State<_CmHeader>
                           ? client.disconnected
                               ? translate("Disconnected")
                               : translate("Connected")
-                          : "${translate("Request access to your device")}...",
+                          : translate("Aguardando sua autorização..."),
                       style: TextStyle(color: Colors.white),
                     ).marginOnly(right: 8.0),
                     if (client.authorized)
@@ -1023,7 +1022,7 @@ class _CmControlPanel extends StatelessWidget {
             handleElevate(context);
             windowManager.minimize();
           },
-              text: 'Accept and Elevate',
+              text: 'ACEITAR E ELEVAR (UAC)',
               icon: Icon(
                 Icons.security_rounded,
                 color: Colors.white,
@@ -1037,29 +1036,36 @@ class _CmControlPanel extends StatelessWidget {
           children: [
             if (showAccept)
               Expanded(
+                flex: 2,
                 child: Column(
                   children: [
                     buildButton(
                       context,
-                      color: MyTheme.accent,
+                      color: Color(0xFF10B981), // verde de alta confiança
                       onClick: () {
                         handleAccept(context);
                         windowManager.minimize();
                       },
-                      text: 'Accept',
+                      text: 'ACEITAR CONEXÃO',
+                      icon: Icon(
+                        Icons.check_circle_outline,
+                        color: Colors.white,
+                        size: 16,
+                      ),
                       textColor: Colors.white,
                     ),
                   ],
                 ),
               ),
             Expanded(
+              flex: 1,
               child: buildButton(
                 context,
-                color: Colors.transparent,
-                border: Border.all(color: Colors.grey),
+                color: Colors.grey[700], // tom neutro
+                border: Border.all(color: Colors.transparent),
                 onClick: handleDisconnect,
-                text: 'Cancel',
-                textColor: null,
+                text: 'RECUSAR',
+                textColor: Colors.white,
               ),
             ),
           ],

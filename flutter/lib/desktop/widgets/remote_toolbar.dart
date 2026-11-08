@@ -94,8 +94,8 @@ class _ToolbarTheme {
   static Color inactiveColor = Colors.grey[800]!;
   static Color hoverInactiveColor = Colors.grey[850]!;
 
-  static const Color redColor = Colors.redAccent;
-  static const Color hoverRedColor = Colors.red;
+  static const Color redColor = Color(0xFFEF4444);
+  static const Color hoverRedColor = Color(0xFFDC2626);
   // kMinInteractiveDimension
   static const double height = 20.0;
   static const double dividerHeight = 12.0;
@@ -104,18 +104,17 @@ class _ToolbarTheme {
   static const double buttonHMargin = 2;
   static const double buttonVMargin = 6;
   static const double iconRadius = 8;
-  static const double elevation = 3;
+  static const double elevation = 4;
 
   static double dividerSpaceToAction = isWindows ? 8 : 14;
 
-  static double menuBorderRadius = isWindows ? 5.0 : 7.0;
+  static double menuBorderRadius = 16.0;
   static EdgeInsets menuPadding = isWindows
       ? EdgeInsets.fromLTRB(4, 12, 4, 12)
       : EdgeInsets.fromLTRB(6, 14, 6, 14);
-  static const double menuButtonBorderRadius = 3.0;
+  static const double menuButtonBorderRadius = 16.0;
 
-  static Color borderColor(BuildContext context) =>
-      MyTheme.color(context).border3 ?? MyTheme.border;
+  static Color borderColor(BuildContext context) => Color(0xFF334155);
 
   static Color? dividerColor(BuildContext context) =>
       MyTheme.color(context).divider;
@@ -368,7 +367,7 @@ class _RemoteToolbarState extends State<RemoteToolbar> {
     }
     if (!isWeb) toolbarItems.add(_RecordMenu());
     toolbarItems.add(_CloseMenu(id: widget.id, ffi: widget.ffi));
-    final toolbarBorderRadius = BorderRadius.all(Radius.circular(4.0));
+    final toolbarBorderRadius = BorderRadius.all(Radius.circular(16.0));
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -376,11 +375,7 @@ class _RemoteToolbarState extends State<RemoteToolbar> {
           elevation: _ToolbarTheme.elevation,
           shadowColor: MyTheme.color(context).shadow,
           borderRadius: toolbarBorderRadius,
-          color: Theme.of(context)
-              .menuBarTheme
-              .style
-              ?.backgroundColor
-              ?.resolve(MaterialState.values.toSet()),
+          color: Color(0xFF0F172A),
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Theme(
@@ -544,16 +539,30 @@ class _MonitorMenu extends StatelessWidget {
         child: Text(translate('Show displays as individual windows')));
   }
 
-  buildOneMonitorButton(i, curDisplay) => Text(
-        '${i + 1}',
-        style: TextStyle(
-          color: i == curDisplay
-              ? _ToolbarTheme.blueColor
-              : _ToolbarTheme.inactiveColor,
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
+  buildOneMonitorButton(i, curDisplay) {
+    final bool isActive = i == curDisplay;
+    return Container(
+      width: 20,
+      height: 14,
+      decoration: BoxDecoration(
+        color: isActive ? Color(0xFF2563EB) : Color(0xFF334155),
+        borderRadius: BorderRadius.circular(3),
+        border: isActive
+            ? null
+            : Border.all(color: Color(0xFF64748B), width: 1),
+      ),
+      child: Center(
+        child: Text(
+          '${i + 1}',
+          style: TextStyle(
+            color: isActive ? Colors.white : Colors.grey[400],
+            fontSize: 9,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      );
+      ),
+    );
+  }
 
   List<Widget> buildMonitorList(BuildContext context, bool isMulti) {
     final List<Widget> monitorList = [];
