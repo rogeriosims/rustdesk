@@ -119,6 +119,36 @@ Workflow `.github/workflows/build-windows.yml`:
 
 ---
 
+### TAREFA 7: Modernização da Barra Flutuante de Sessão Remota e Seletor de Monitores
+Arquivo de foco: `flutter/lib/desktop/widgets/remote_toolbar.dart`
+
+1. **Design em Formato de Cápsula Flutuante Moderna:**
+   - Atualizar `_ToolbarTheme` para utilizar cantos bem arredondados (`BorderRadius.circular(16)`), fundo escuro elegante (`#0F172A` / `#1E293B`) com borda sutil (`#334155`) e sombra suave (`elevation: 4`).
+2. **Seletor de Monitores Visual (`_MonitorMenu` e `buildOneMonitorButton`):**
+   - Substituir os números em texto puro (`1`, `2`) por botões em formato de monitor em miniatura:
+     - Formato de tela retangular (proporção 16:10, cantos arredondados).
+     - **Monitor Ativo:** Tela preenchida em Azul RocketDesk (`#2563EB`) com o número branco centralizado em negrito.
+     - **Monitor Inativo:** Tela cinza/translúcida (`#334155`) com borda suave (`#64748B`) e número em cinza claro.
+     - Adicionar Tooltip amigável: *"Monitor 1"*, *"Monitor 2"*, etc.
+3. **Botão de Desconectar / Fechar:**
+   - Estilização em vermelho suave com hover destacado para encerramento claro da sessão pelo técnico.
+
+---
+
+### TAREFA 8: Redesenho da Janela de Solicitação de Acesso Recebida (Connection Manager)
+Arquivo de foco: `flutter/lib/desktop/pages/server_page.dart` (Classes `ConnectionManager` e `ConnectionManagerState`)
+
+1. **Apresentação Clara e Confiável:**
+   - No topo da janela de solicitação recebida, incluir o logo do RocketDesk com o título: *"Solicitação de Acesso Remoto"*.
+   - Exibir mensagem amigável: *"O suporte autorizado está solicitando permissão para controlar este computador."*
+2. **Botões de Ação Intuitivos:**
+   - Botão **`[ ACEITAR CONEXÃO ]`** largo, em cor verde/azul de alta confiança com ícone de verificação (`Icons.check_circle_outline`).
+   - Botão secundário **`[ RECUSAR ]`** em tom neutro/cinza, garantindo que o usuário leigo não tenha medo nem hesite em aceitar o suporte.
+3. **Preservar Elevação de UAC:**
+   - Manter a funcionalidade de "Aceitar e Elevar" (`Accept and Elevate`) quando o técnico solicitar privilégios de administrador.
+
+---
+
 ## 4. Regras Rígidas para o Desenvolvedor (Definition of Done)
 1. **Nenhum caminho absoluto local:** Qualquer menção a `C:\...` que não seja variável de ambiente do CI reprova o PR imediatamente.
 2. **Nenhum arquivo de log committed:** Arquivos temporários como `flutter_run.log` não devem ser comitados.
