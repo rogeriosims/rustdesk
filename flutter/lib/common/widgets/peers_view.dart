@@ -187,14 +187,15 @@ class _PeersViewState extends State<_PeersView>
       child: Consumer<Peers>(builder: (context, peers, child) {
         if (peers.peers.isEmpty) {
           gFFI.peerTabModel.setCurrentTabCachedPeers([]);
+          final hintColor = Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6);
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.sentiment_very_dissatisfied_rounded,
-                  color: Theme.of(context).tabBarTheme.labelColor,
-                  size: 40,
+                  Icons.devices_outlined,
+                  color: hintColor,
+                  size: 36,
                 ).paddingOnly(bottom: 10),
                 Text(
                   translate(
@@ -202,7 +203,8 @@ class _PeersViewState extends State<_PeersView>
                   ),
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Theme.of(context).tabBarTheme.labelColor,
+                    fontSize: 12,
+                    color: hintColor,
                   ),
                 ),
               ],

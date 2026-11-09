@@ -18,6 +18,7 @@ import '../../common.dart';
 import '../../common/formatter/id_formatter.dart';
 import '../../common/widgets/peer_tab_page.dart';
 import '../../common/widgets/autocomplete.dart';
+import '../../common/widgets/login.dart';
 import '../../models/platform_model.dart';
 import '../../desktop/widgets/material_mod_popup_menu.dart' as mod_menu;
 
@@ -301,6 +302,93 @@ class _ConnectionPageState extends State<ConnectionPage>
     }
   }
 
+  Widget _buildAccountBar(BuildContext context) {
+    return Obx(() {
+      final userModel = gFFI.userModel;
+      final userName = userModel.userName.value;
+      final isLogin = userName.isNotEmpty;
+
+      return Container(
+        margin: const EdgeInsets.only(top: 14, right: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.background,
+          border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.5)),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: isLogin
+            ? Row(
+                children: [
+                  CircleAvatar(
+                    radius: 14,
+                    backgroundColor: const Color(0xFF2563EB),
+                    child: Text(
+                      userName.isNotEmpty ? userName[0].toUpperCase() : 'U',
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          userName,
+                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const Text(
+                          "Conta Corporativa Conectada",
+                          style: TextStyle(fontSize: 10, color: Color(0xFF10B981), fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => logOutConfirmDialog(),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      minimumSize: const Size(0, 0),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: Text(
+                      "Sair",
+                      style: TextStyle(fontSize: 11, color: Theme.of(context).textTheme.bodySmall?.color),
+                    ),
+                  )
+                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.business_center_outlined, size: 16, color: Theme.of(context).textTheme.bodySmall?.color),
+                      const SizedBox(width: 8),
+                      const Text(
+                        "Conta Corporativa",
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  ElevatedButton(
+                    onPressed: () => loginDialog(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF2563EB),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      minimumSize: const Size(0, 0),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                    ),
+                    child: const Text("Entrar na Conta", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final isOutgoingOnly = bind.isOutgoingOnly();
@@ -309,13 +397,14 @@ class _ConnectionPageState extends State<ConnectionPage>
         Expanded(
             child: Column(
           children: [
+            _buildAccountBar(context),
             Row(
               children: [
                 Flexible(child: _buildRemoteIDTextField(context)),
               ],
-            ).marginOnly(top: 22),
-            SizedBox(height: 12),
-            Divider().paddingOnly(right: 12),
+            ).marginOnly(top: 14),
+            const SizedBox(height: 12),
+            const Divider().paddingOnly(right: 12),
             Expanded(child: PeerTabPage()),
           ],
         ).paddingOnly(left: 12.0)),

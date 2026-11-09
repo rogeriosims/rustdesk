@@ -182,35 +182,35 @@ class _DesktopSettingPageState extends State<DesktopSettingPage>
       switch (tab) {
         case SettingsTabKey.general:
           settingTabs.add(_TabInfo(
-              tab, 'General', Icons.settings_outlined, Icons.settings));
+              tab, 'Geral', Icons.settings_outlined, Icons.settings));
           break;
         case SettingsTabKey.safety:
-          settingTabs.add(_TabInfo(tab, 'Security',
+          settingTabs.add(_TabInfo(tab, 'Segurança & Senha',
               Icons.enhanced_encryption_outlined, Icons.enhanced_encryption));
           break;
         case SettingsTabKey.network:
           settingTabs
-              .add(_TabInfo(tab, 'Network', Icons.link_outlined, Icons.link));
+              .add(_TabInfo(tab, 'Servidor & Rede', Icons.link_outlined, Icons.link));
           break;
         case SettingsTabKey.display:
-          settingTabs.add(_TabInfo(tab, 'Display',
+          settingTabs.add(_TabInfo(tab, 'Qualidade da Imagem',
               Icons.desktop_windows_outlined, Icons.desktop_windows));
           break;
         case SettingsTabKey.plugin:
           settingTabs.add(_TabInfo(
-              tab, 'Plugin', Icons.extension_outlined, Icons.extension));
+              tab, 'Extensões', Icons.extension_outlined, Icons.extension));
           break;
         case SettingsTabKey.account:
           settingTabs.add(
-              _TabInfo(tab, 'Account', Icons.person_outline, Icons.person));
+              _TabInfo(tab, 'Conta Corporativa', Icons.person_outline, Icons.person));
           break;
         case SettingsTabKey.printer:
           settingTabs
-              .add(_TabInfo(tab, 'Printer', Icons.print_outlined, Icons.print));
+              .add(_TabInfo(tab, 'Impressora Remota', Icons.print_outlined, Icons.print));
           break;
         case SettingsTabKey.about:
           settingTabs
-              .add(_TabInfo(tab, 'About', Icons.info_outline, Icons.info));
+              .add(_TabInfo(tab, 'Sobre o RocketDesk', Icons.info_outline, Icons.info));
           break;
       }
     }
@@ -1614,7 +1614,7 @@ class _NetworkState extends State<_Network> with AutomaticKeepAliveClientMixin {
 
     final divider = const Divider(height: 1, indent: 16, endIndent: 16);
     return _Card(
-      title: 'Network',
+      title: 'Servidor & Rede Privada',
       children: [
         Container(
           child: Column(
@@ -1623,7 +1623,7 @@ class _NetworkState extends State<_Network> with AutomaticKeepAliveClientMixin {
               if (!hideServer)
                 listTile(
                   icon: Icons.dns_outlined,
-                  title: 'ID/Relay Server',
+                  title: 'Configuração do Servidor RocketDesk',
                   onTap: () => showServerSettings(gFFI.dialogManager, setState),
                 ),
               if (!hideProxy && !hideServer) divider,
