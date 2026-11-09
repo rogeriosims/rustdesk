@@ -89,32 +89,32 @@ class ToolbarState {
 }
 
 class _ToolbarTheme {
-  static const Color blueColor = MyTheme.button;
-  static const Color hoverBlueColor = MyTheme.accent;
-  static Color inactiveColor = Colors.grey[800]!;
-  static Color hoverInactiveColor = Colors.grey[850]!;
+  static const Color blueColor = Colors.transparent;
+  static const Color hoverBlueColor = Color(0x3338BDF8);
+  static const Color inactiveColor = Colors.transparent;
+  static const Color hoverInactiveColor = Color(0x22FFFFFF);
 
-  static const Color redColor = Color(0xFFEF4444);
-  static const Color hoverRedColor = Color(0xFFDC2626);
+  static const Color redColor = Colors.transparent;
+  static const Color hoverRedColor = Color(0xCCEF4444);
   // kMinInteractiveDimension
-  static const double height = 20.0;
-  static const double dividerHeight = 12.0;
+  static const double height = 24.0;
+  static const double dividerHeight = 14.0;
 
-  static const double buttonSize = 32;
+  static const double buttonSize = 34;
   static const double buttonHMargin = 2;
-  static const double buttonVMargin = 6;
+  static const double buttonVMargin = 4;
   static const double iconRadius = 8;
-  static const double elevation = 4;
+  static const double elevation = 6;
 
   static double dividerSpaceToAction = isWindows ? 8 : 14;
 
-  static double menuBorderRadius = 16.0;
+  static double menuBorderRadius = 12.0;
   static EdgeInsets menuPadding = isWindows
       ? EdgeInsets.fromLTRB(4, 12, 4, 12)
       : EdgeInsets.fromLTRB(6, 14, 6, 14);
-  static const double menuButtonBorderRadius = 16.0;
+  static const double menuButtonBorderRadius = 8.0;
 
-  static Color borderColor(BuildContext context) => Color(0xFF334155);
+  static Color borderColor(BuildContext context) => const Color(0xFF334155);
 
   static Color? dividerColor(BuildContext context) =>
       MyTheme.color(context).divider;
@@ -312,8 +312,9 @@ class _RemoteToolbarState extends State<RemoteToolbar> {
           offstage: _dragging.isTrue,
           child: Material(
             elevation: _ToolbarTheme.elevation,
-            shadowColor: MyTheme.color(context).shadow,
+            shadowColor: Colors.black54,
             borderRadius: borderRadius,
+            color: const Color(0xFF0F172A),
             child: _DraggableShowHide(
               id: widget.id,
               sessionId: widget.ffi.sessionId,
@@ -367,15 +368,15 @@ class _RemoteToolbarState extends State<RemoteToolbar> {
     }
     if (!isWeb) toolbarItems.add(_RecordMenu());
     toolbarItems.add(_CloseMenu(id: widget.id, ffi: widget.ffi));
-    final toolbarBorderRadius = BorderRadius.all(Radius.circular(16.0));
+    final toolbarBorderRadius = BorderRadius.all(Radius.circular(20.0));
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Material(
           elevation: _ToolbarTheme.elevation,
-          shadowColor: MyTheme.color(context).shadow,
+          shadowColor: Colors.black54,
           borderRadius: toolbarBorderRadius,
-          color: Color(0xFF0F172A),
+          color: const Color(0xFF0F172A),
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Theme(
@@ -438,10 +439,9 @@ class _PinMenu extends StatelessWidget {
         assetName: state.pin ? "assets/pinned.svg" : "assets/unpinned.svg",
         tooltip: state.pin ? 'Unpin Toolbar' : 'Pin Toolbar',
         onPressed: state.switchPin,
-        color:
-            state.pin ? _ToolbarTheme.blueColor : _ToolbarTheme.inactiveColor,
+        color: state.pin ? const Color(0x332563EB) : _ToolbarTheme.inactiveColor,
         hoverColor: state.pin
-            ? _ToolbarTheme.hoverBlueColor
+            ? const Color(0x662563EB)
             : _ToolbarTheme.hoverInactiveColor,
       ),
     );
@@ -657,18 +657,23 @@ class _MonitorMenu extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(
-                color: Colors.grey,
-                width: 1.0,
+                color: display.value == i
+                    ? const Color(0xFF38BDF8)
+                    : const Color(0xFF475569),
+                width: display.value == i ? 1.5 : 1.0,
               ),
-              color: display.value == i ? activeBgColor : Colors.white,
+              borderRadius: BorderRadius.circular(4.0),
+              color: display.value == i
+                  ? const Color(0xFF2563EB)
+                  : const Color(0xFF1E293B),
             ),
             child: Center(
                 child: Text(
               '${i + 1}',
               style: TextStyle(
                 color: display.value == i
-                    ? activeTextColor
-                    : _ToolbarTheme.inactiveColor,
+                    ? Colors.white
+                    : const Color(0xFFCBD5E1),
                 fontSize: fontSize,
                 fontWeight: FontWeight.bold,
               ),
@@ -2527,10 +2532,10 @@ class _DraggableShowHideState extends State<_DraggableShowHide> {
   Widget _buildDraggable(BuildContext context) {
     return Draggable(
       axis: Axis.horizontal,
-      child: Icon(
+      child: const Icon(
         Icons.drag_indicator,
         size: 20,
-        color: MyTheme.color(context).drag_indicator,
+        color: Colors.white70,
       ),
       feedback: widget,
       onDragStarted: (() {
@@ -2604,6 +2609,7 @@ class _DraggableShowHideState extends State<_DraggableShowHide> {
                       ? Icons.fullscreen_exit
                       : Icons.fullscreen,
                   size: iconSize,
+                  color: Colors.white70,
                 ),
               ),
             )),
@@ -2617,6 +2623,7 @@ class _DraggableShowHideState extends State<_DraggableShowHide> {
                     child: Icon(
                       Icons.remove,
                       size: iconSize,
+                      color: Colors.white70,
                     ),
                   ),
                 ),
@@ -2631,6 +2638,7 @@ class _DraggableShowHideState extends State<_DraggableShowHide> {
                 child: Icon(
                   show.isTrue ? Icons.expand_less : Icons.expand_more,
                   size: iconSize,
+                  color: Colors.white70,
                 ),
               ))),
         ),
