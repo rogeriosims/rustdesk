@@ -403,8 +403,13 @@ class _RemoteToolbarState extends State<RemoteToolbar> {
     return Theme.of(context).copyWith(
       menuButtonTheme: MenuButtonThemeData(
         style: ButtonStyle(
-          minimumSize: MaterialStatePropertyAll(Size(64, 32)),
-          textStyle: MaterialStatePropertyAll(
+          backgroundColor: const MaterialStatePropertyAll(Colors.transparent),
+          surfaceTintColor: const MaterialStatePropertyAll(Colors.transparent),
+          shadowColor: const MaterialStatePropertyAll(Colors.transparent),
+          elevation: const MaterialStatePropertyAll(0),
+          minimumSize: const MaterialStatePropertyAll(Size(32, 32)),
+          padding: const MaterialStatePropertyAll(EdgeInsets.zero),
+          textStyle: const MaterialStatePropertyAll(
             TextStyle(fontWeight: FontWeight.normal),
           ),
           shape: MaterialStatePropertyAll(RoundedRectangleBorder(
@@ -416,14 +421,16 @@ class _RemoteToolbarState extends State<RemoteToolbar> {
         space: _ToolbarTheme.dividerSpaceToAction,
         color: _ToolbarTheme.dividerColor(context),
       ),
-      menuBarTheme: MenuBarThemeData(
-          style: MenuStyle(
-        padding: MaterialStatePropertyAll(EdgeInsets.zero),
-        elevation: MaterialStatePropertyAll(0),
-        shape: MaterialStatePropertyAll(BeveledRectangleBorder()),
-      ).copyWith(
-              backgroundColor:
-                  Theme.of(context).menuBarTheme.style?.backgroundColor)),
+      menuBarTheme: const MenuBarThemeData(
+        style: MenuStyle(
+          backgroundColor: MaterialStatePropertyAll(Colors.transparent),
+          surfaceTintColor: MaterialStatePropertyAll(Colors.transparent),
+          shadowColor: MaterialStatePropertyAll(Colors.transparent),
+          elevation: MaterialStatePropertyAll(0),
+          padding: MaterialStatePropertyAll(EdgeInsets.zero),
+          shape: MaterialStatePropertyAll(RoundedRectangleBorder()),
+        ),
+      ),
     );
   }
 }
@@ -2667,11 +2674,7 @@ class _DraggableShowHideState extends State<_DraggableShowHide> {
       data: TextButtonThemeData(style: buttonStyle),
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context)
-              .menuBarTheme
-              .style
-              ?.backgroundColor
-              ?.resolve(MaterialState.values.toSet()),
+          color: const Color(0xFF0F172A),
           border: Border.all(
             color: _ToolbarTheme.borderColor(context),
             width: 1,
